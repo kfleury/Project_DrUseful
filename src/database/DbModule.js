@@ -1,4 +1,8 @@
-const {Sequelize, Datatypes} = require('sequelize');
+const {Sequelize, DataTypes} = require('sequelize');
+const seq = new Sequelize({
+    dialect: 'sqlite',
+    host: 'database.sqlite'
+});
 
 // ? List of content
 const texts = [
@@ -8,32 +12,47 @@ const texts = [
     'danger',
 ];
 
-// ? Affect attributes to texts and put it in model drugInfo
-texts.forEach(text => {
-    drugModel[text] = {
-        type: Datatypes.STRING,
-        allowNull: false
-    };
-});
-
 // ? Content of drug model
 const drugModel = {
     id: {
-        type: Datatypes.UUID,
+        type: DataTypes.UUIDV4,
         allowNull: true,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true
     },
-    type: Datatypes.ENUM('soft, hard')
+    type: DataTypes.ENUM(['soft', 'hard'])
 };
 
-const drug = seq.define('user', drugModel);
+// ? Affect attributes to texts and put it in model drugInfo
+texts.forEach(text => {
+    drugModel[text] = {
+        type: DataTypes.STRING,
+        allowNull: true
+    };
+});
+
+const drug = seq.define('drug', drugModel);
 
 async function initDatabase() {
     await seq.sync();
     console.log('Server Load');
 }
 
+async function testmyDb() {
+    await initDatabase();
+    await drug.create({
+        description: 'test',
+        usage: 'con',
+        danger: 'danger',
+        type: 'hard'})
+        .then(e => console.log('test'))
+        .catch(e => console.log(e));
+    await drug.findAll()
+        .then(data => console.log(JSON.stringify(data, null, 4)))
+        .catch(e => console.log(e));
+}
+
+testmyDb();
 // ! Export
 module.exports = {
     initDatabase, drug,
