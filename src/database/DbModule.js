@@ -20,6 +20,11 @@ const drugModel = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     type: DataTypes.ENUM(['soft', 'hard'])
 };
 
@@ -41,6 +46,7 @@ async function initDatabase() {
 async function testmyDb() {
     await initDatabase();
     await drug.create({
+        name: 'Cocaine',
         description: 'test',
         usage: 'con',
         danger: 'danger',
