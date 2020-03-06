@@ -43,24 +43,10 @@ async function initDatabase() {
     console.log('Server Load');
 }
 
-async function testmyDb() {
-    await initDatabase();
-    await drug.create({
-        name: 'Cocaine',
-        description: 'test',
-        usage: 'con',
-        danger: 'danger',
-        type: 'hard'})
-        .then(e => console.log('test'))
-        .catch(e => console.log(e));
-    await drug.findAll()
-        .then(data => console.log(JSON.stringify(data, null, 4)))
-        .catch(e => console.log(e));
-}
 
-testmyDb();
+//testmyDb();
 // ! Export
 module.exports = {
-    initDatabase, drug,
+    initDatabase, drug
 };
 
