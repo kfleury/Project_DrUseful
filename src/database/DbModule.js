@@ -122,6 +122,11 @@ async function initDatabase() {
 
 // ! Export
 module.exports = {
-    initDatabase, drug, user, effect, userDrugFav, drugEffect,
+<<<<<<< HEAD
+    initDatabase, drug, user, effect, userDrogueFav, drugEffect,
 };
 
+=======
+    initDatabase, drug, user, effect, userDrogueFav, drugEffect,
+};
+>>>>>>> a666cd965ebad17a91d95fa50cf1d8ce37e0fd41
