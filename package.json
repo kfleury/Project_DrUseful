@@ -1,0 +1,26 @@
+{
+  "name": "Project_DrUseful",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kfleury/Project_DrUseful.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kfleury/Project_DrUseful/issues"
+  },
+  "homepage": "https://github.com/kfleury/Project_DrUseful#readme",
+  "dependencies": {
+    "@types/express": "^4.17.3",
+    "@types/joi": "^14.3.4",
+    "express": "^4.17.1",
+    "joi": "^14.3.1"
+  }
+}
