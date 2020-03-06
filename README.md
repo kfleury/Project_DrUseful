@@ -3,32 +3,31 @@ Projet piscine software
 
 # Database
 
-- Drogue
+- drug
   - id
-  - Description
-  - Story
-  - ModeDeConsomation
-  - Danger
-  - adiction
-  - type (enum: Soft / Hard)
+  - description
+  - story
+  - consummation
+  - danger
+  - type (enum: soft, hard)
 
-- DrogueEffect
+- drugEffect
   - DrogueID
   - EffectID
 
-- Effect
+- effect
   - id
-  - Durée
-  - puissance
-  - Type (enum Relaxant Excitant Psycotrope)
+  - duration
+  - power
+  - type (enum chill, excitement, hallucination, euphoria)
   
- - Users
+ - user
    - id
    - username
    - password
    - bio
    
-- UsersDrogueFavortie
+- userDrogueFav
   - drogueID
   - userID
 

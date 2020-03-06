@@ -1,33 +1,32 @@
 # Database
 
-- Drogue
-  - id
+- Drug
+  - ID
   - Description
   - Story
-  - ModeDeConsomation
+  - Usage
   - Danger
-  - adiction
-  - type (enum: Soft / Hard)
+  - Type (enum: Soft / Hard)
 
-- DrogueEffect
+- DrugEffect
   - DrogueID
   - EffectID
 
 - Effect
-  - id
-  - Durée
-  - puissance
+  - ID
+  - Duration
+  - Strength
   - Type (enum Relaxant Excitant Psycotrope)
   
- - Users
-   - id
-   - username
-   - password
+ - User
+   - ID 
+   - username 
+   - password 
    - bio
    
-- UsersDrogueFavortie
-  - drogueID
-  - userID
+- UserDrugFav
+  - DrugID
+  - UserID
 
   
 # Routes  
