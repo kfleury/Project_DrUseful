@@ -11,21 +11,18 @@ header.page-header {
 }
 
 header.page-header >h2 {
-    margin-top: 0px;
-    margin-left: 50%;
-    position: center;
+    position: absolute;
+    margin: 50%;
 }
 
 header.page-header >h3 {
-    margin-top: 40px;
-    margin-left: -4%;
-    position: center;
+    position: absolute;
+    margin: 50%;
 }
 
 header.page-header >img {
-    margin-top: 0px;
     position: fixed;
-    left: 10px;
-    top: 10px;
+    left: 1%;
+    top: 1%;
 
 }

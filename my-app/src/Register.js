@@ -27,11 +27,11 @@ function Register() {
 
   return (
     <div className="Register">
-      <Link to="/">
-        <button className= "ButtonMenu">Menu</button>
-      </Link>
       <header className= "Title">
-        <p>
+          <Link to="/">
+              <button className= "ButtonMenu">Menu</button>
+          </Link>
+        <p className="inscription">
           INSCRIPTION
         </p>
       </header>
@@ -47,7 +47,7 @@ function Register() {
         <label for="choose" className="text">confirm password</label>
         <input value={confpassword} onChange={e => setConfpassword(e.target.value)} required></input>
       </form>
-      <button className = "ButtonEnter" onClick={sendInfo}>Envoyer</button>
+      <button className = "ButtonEnter" onClick={sendInfo}>Register</button>
       <text>{token === undefined ? <text>Error </text> : <div><Redirect to="/home"/></div>}</text>
     </div>
   );

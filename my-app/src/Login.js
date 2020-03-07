@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 async function requestToken(login, password) {
   const response = await axios.post(
     'http://localhost:3000/login',
-    { "login": login, 
-      "paswword": password,
+    { "login": login,
+      "password": password,
     },
   )
   return response
@@ -26,12 +26,12 @@ function Login() {
 
   return (
     <div className="Register">
-      <Link to="/">
-        <button className= "ButtonMenu">Menu</button>
-      </Link>
       <header className= "Title">
-        <p>
-          CONNEXION
+        <Link to="/">
+            <button className= "ButtonMenu">Menu</button>
+        </Link>
+        <p className="inscription">
+          CONNECTION
         </p>
       </header>
       <form>
@@ -42,8 +42,8 @@ function Login() {
         <label for="choose" className="text">password</label>
         <input value={password} onChange={e => setPassword(e.target.value)} required></input>
       </form>
-      <button className = "ButtonEnter" onClick={sendInfo}>Envoyer</button>
-      <text>{token === undefined ? <text>Error </text> : <div><Redirect to="/home"/></div>}</text>
+      <button className = "ButtonEnter" onClick={sendInfo}>Log in</button>
+      <text>{token === undefined ? <text>Error</text> : <div><Redirect to="/home"/></div>}</text>
     </div>
   );
 }
