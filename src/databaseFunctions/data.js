@@ -8,29 +8,25 @@ async function createData(table, data){
     }
 }
 
-async function updateData(table, varCheck, valCheck, modifs){
+async function updateData(table, whereObject, modifs){
     try {
-        await database[table].update(modifs, {
-            where: {[varCheck]: valCheck},
-        });
+        await database[table].update(modifs, {where: whereObject,});
     } catch (e) {
         throw e;
     }
 }
-async function destroyData(table, varCheck, valCheck){
+
+async function destroyData(table, whereObject){
     try {
-        await database[table].destroy({
-            where:
-                {[varCheck]: valCheck}
-        });
+        await database[table].destroy({where: whereObject});
     } catch (e){
         throw (e);
     }
 }
 
-async function getDataByVar(table, variableName, value){
+async function getDataByVar(table, whereObject){
     try {
-        let data = await database[table].findAll({where : {[variableName]: value}});
+        let data = await database[table].findAll({where : whereObject});
         if (data.length === 0)
             throw ('Wrong name');
         return data[0].dataValues;
@@ -62,13 +58,14 @@ async function getTableVars(table, variable, varCheck, valCheck){
 async function testmyDb() {
     await database.initDatabase();
 
+    //console.log(await getTableVars('drug', 'id', 'type', 'soft'));
+    console.log(await getDataByVar('drug',{id: '9f3d0522-f514-4e3a-8fc2-2f343ed746e6'}));
     // ** Show database
-    console.log(await getTableVars('drug', 'id', 'type', 'soft'));
-    console.log(await getDataByVar('drug','id', '9f3d0522-f514-4e3a-8fc2-2f343ed746e6'));
     await database.drug.findAll()
         .then(data => console.log(JSON.stringify(data, null, 4)))
         .catch(e => console.log(e));
 }
+
 
 testmyDb();
 
