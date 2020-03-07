@@ -101,7 +101,7 @@ const drugEffect = seq.define('drugEffect', {
         unique: true,
         foreignKey: 'drug'
     },
-    userId: {
+    effectId: {
         type: DataTypes.UUIDV4,
         unique: true,
         foreignKey: 'user'
@@ -110,7 +110,7 @@ const drugEffect = seq.define('drugEffect', {
 });
 
 // ! Creation of userDrogueFav associative model in DB
-const userDrugFav = seq.define('userDrogueFav', {
+const userDrugFav = seq.define('userDrugFav', {
     drogueId: {
         type: DataTypes.UUIDV4,
         unique: true,
@@ -118,7 +118,7 @@ const userDrugFav = seq.define('userDrogueFav', {
     },
     userId: {
         type: DataTypes.UUIDV4,
-        unique: true,
+        unique: false,
         foreignKey: 'user'
     },
 

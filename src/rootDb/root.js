@@ -5,7 +5,7 @@
 ** File description:
 ** root de la db
 */
-// include and lib
+// ! Include and lib
 const express = require('express');
 
 const Joi = require('joi');
@@ -22,25 +22,42 @@ const cookieParser = require('cookie-parser');
 
 const lib = require('../databaseFunctions/data');
 
+const FileStore = require('session-file-store')(session);
 //const database = require('../database/DbModule.js');
 
 // use and env
 app.use(bodyParser.json());
-app.use(session({secret: "Your secret key", resave: true, saveUninitialized: false}));
+app.use(session({
+    secret: "Your secret key",
+    resave: true,
+    saveUninitialized: false,
+    store: new FileStore({path: './sessions'})
+}));
 
 // Joi schema and function
-const newUserSchema = Joi.object().keys({
+const newUser1Schema = Joi.object().keys({
     login: Joi.string().required(),
     password: Joi.string().required(),
+});
+
+const newUser2Schema = Joi.object().keys({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    confPassword: Joi.string().required(),
 });
 
 const newIdSchema = Joi.object().keys({
     userId: Joi.string().required(),
     cookie: Joi.object().required(),
+    __lastAccess: Joi.number().optional(),
 });
 
 const newBodySchema = Joi.object().keys({
-    drogueID: Joi.string().required(),
+    drugId: Joi.string().required(),
+});
+
+const newIdEffectSchema = Joi.object().keys({
+    type: Joi.string().required(),
 });
 
 const isValid = (schema, location = 'body') => async (req, res, next) => {
@@ -71,7 +88,7 @@ async function rootBase() {
             // on the main page
             res.send("home page ");
         });
-        app.post('/DrUseful/login', isValid(newUserSchema), async (req, res) => {
+        app.post('/DrUseful/login', isValid(newUser1Schema), async (req, res) => {
             // body login and password (hash) return the user
             let db = await lib.database.user.findAll();
             db.filter(function (user) {
@@ -89,9 +106,14 @@ async function rootBase() {
                 res.send("Bad username or bad password");
             }
         });
-        app.post('/DrUseful/register', isValid(newUserSchema), async (req, res) => {
+        app.post('/DrUseful/register', isValid(newUser2Schema), async (req, res) => {
             // body login and username
             let log = req.body.login;
+            let conPwd = req.body.confPassword;
+            if (conPwd !== req.body.password) {
+                req.status = 400;
+                res.send("This is not the same password");
+            }
             let hash = await argon2.hash(req.body.password);
             await lib.createData('user', {username: log, password: hash, perm: 'user'});
             const re = await lib.getTableVars('user', 'id', 'username', log);
@@ -100,39 +122,58 @@ async function rootBase() {
         });
         app.get('/DrUseful/me', isLogin(newIdSchema), async (req, res) => {
             // return the user logged in
-            res.send("in me page");
+            const re = await lib.getDataByVar('user', {id: req.session.userId});
+            console.log(re);
+            res.send(re);
         });
-        app.get('/DrUseful/drugs', async (req, res) => {
-            // return an array of drugs
-            res.send("in drugs page");
+        app.get('/DrUseful/drug', async (req, res) => {
+            // return an array of drug
+            let re = await lib.database.drug.findAll();
+            re = JSON.stringify(re, null, 4);
+            console.log(re);
+            res.send(re);
         });
-        app.get('/DrUseful/drugs/:id', isValid(newIdSchema, 'params'), async (req, res) => {
+        app.get('/DrUseful/drug/:id', async (req, res) => {
             // return a specific drug with the id
-            res.send("in a specific drugs page");
+            let re = await lib.getDataByVar('drug', {name: req.params.id});
+            res.send(re);
         });
-        app.get('/DrUseful/effects', async (req, res) => {
-            // returns an array of effects
-            res.send("in effects page");
+        app.get('/DrUseful/effect', async (req, res) => {
+            // returns an array of effect
+            let re = await lib.database.effect.findAll();
+            console.log(JSON.stringify(re, null, 4));
+            res.send(re);
         });
-        app.get('/DrUseful/effects/:id', isValid(newIdSchema, 'params'), async (req, res) => {
+        app.get('/DrUseful/effect/:id', async (req, res) => {
             // return a specific effect with the id
-            res.send("in a specific effects page");
+            let re = await lib.getDataByVar('effect', {type: req.params.id});
+            res.send(re);
         });
         // the user must be logged in
         app.get('/DrUseful/me/favorite', isLogin(newIdSchema), async (req, res) => {
             // return the user.favorite
-            res.send("in the favorite page");
+            let re = await lib.getDataByVar('userDrugFav', {userId: req.session.userId});
+            console.log(re);
+            res.send(re);
         });
         app.post('/DrUseful/me/favorite/add', isLogin(newIdSchema), isValid(newBodySchema), async (req, res) => {
             // body drugID
-            res.send("in the add favorite page of the user");
+            let dr = await lib.getTableVars('drug','id','name',req.body.drugId);
+            await lib.createData('userDrugFav',{drogueId: dr[0], userId: req.session.userId});
+            res.send("You have correctly added a new favorite drug");
         });
         app.delete('/DrUseful/me/favorite/delete', isLogin(newIdSchema), isValid(newBodySchema), async (req, res) => {
             // body drugID
+            let dr = await lib.getTableVars('drug','id','name',req.body.drugId);
+            await lib.destroyData('userDrugFav',{drogueId: dr[0], userId: req.session.userId});
             res.send("in the delete favorite page of the user");
+
         });
-        app.post('/DrUseful/me/bio', isLogin(newIdSchema), async (req, res) => {
+        app.post('/DrUseful/me/bio', /*isLogin(newIdSchema), */async (req, res) => {
             // body bio, modify the biography of the user
+            const bio = req.body.description;
+            console.log(bio);
+            await lib.updateData('user',{id: req.session.userId}, {bio: bio});
             res.send("in bio page of the logged in user")
         });
         app.use('*', (req, res) => {

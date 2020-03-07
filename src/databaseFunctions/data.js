@@ -56,9 +56,9 @@ async function getTableVars(table, variable, varCheck, valCheck){
     }
 }
 
-async function testmyDb() {
-    await database.initDatabase();
+//database.initDatabase();
 
+async function testmyDb() {
     //console.log(await getTableVars('drug', 'id', 'type', 'soft'));
     console.log(await getDataByVar('drug',{id: '9f3d0522-f514-4e3a-8fc2-2f343ed746e6'}));
     // ** Show database
