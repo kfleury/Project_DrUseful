@@ -75,7 +75,7 @@ const effect = seq.define('effect', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    power: {
+    strength: {
         type: DataTypes.STRING,
         allowNull: false
     },
