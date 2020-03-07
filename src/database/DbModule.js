@@ -25,6 +25,15 @@ const drugModel = {
         allowNull: false,
         unique: true,
     },
+    dose: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    image: {
+       type: DataTypes.STRING,
+       allowNull: false,
+       defaultValue: 'T\'as oublié la photo poto'
+    },
     type: DataTypes.ENUM(['soft', 'hard'])
 };
 // ? Affect attributes to texts and put it in model drugInfo
@@ -87,7 +96,7 @@ const effect = seq.define('effect', {
 
 // ! Creation of drugEffect associative model in DB
 const drugEffect = seq.define('drugEffect', {
-    drogueId: {
+    drugId: {
         type: DataTypes.UUIDV4,
         unique: true,
         foreignKey: 'drug'
