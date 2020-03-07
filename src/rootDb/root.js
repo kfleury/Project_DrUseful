@@ -20,6 +20,10 @@ const session = require('express-session');
 
 const cookieParser = require('cookie-parser');
 
+const lib = require('../databaseFunctions/data');
+
+//const database = require('../database/DbModule.js');
+
 // use and env
 app.use(bodyParser.json());
 app.use(session({secret: "Your secret key", resave: true, saveUninitialized: false}));
@@ -69,19 +73,29 @@ async function rootBase() {
         });
         app.post('/DrUseful/login', isValid(newUserSchema), async (req, res) => {
             // body login and password (hash) return the user
-            res.send("in login page");
+            let db = await lib.database.user.findAll();
+            db.filter(function (user) {
+                if (user.username === req.body.login) {
+                    req.session.userId = user.id;
+                    db = user;
+                }
+            });
+            let hash;
+            if (await argon2.verify(db.password, req.body.password)) {
+                req.session.userId = db.id;
+                res.send("You are logged in");
+            } else {
+                req.session.userId = 0;
+                res.send("Bad username or bad password");
+            }
         });
         app.post('/DrUseful/register', isValid(newUserSchema), async (req, res) => {
             // body login and username
             let log = req.body.login;
-            let hash;
-            try {
-                hash = await argon2.hash(req.body.password);
-            } catch (err) {
-                console.error("The hash failed");
-            }
-            //await createData('user', {username: log, password: hash, perm: 'user'});
-            req.session.userId = "azertyuiop";
+            let hash = await argon2.hash(req.body.password);
+            await lib.createData('user', {username: log, password: hash, perm: 'user'});
+            const re = await lib.getTableVars('user', 'id', 'username', log);
+            req.session.userId = re[0];
             res.send("Your account has created\nWelcome " + log + " !");
         });
         app.get('/DrUseful/me', isLogin(newIdSchema), async (req, res) => {

@@ -52,7 +52,8 @@ async function getTableVars(table, variable, varCheck, valCheck){
             if (noVarCheck === true || elem.dataValues[varCheck] === valCheck) {
                 list[i] = elem.dataValues[variable];
                 i++;
-            }});
+            }
+        });
         return list;
     } catch (e) {
         throw e;
@@ -70,6 +71,6 @@ async function testmyDb() {
         .catch(e => console.log(e));
 }
 
-testmyDb();
+//testmyDb();
 
-module.exports = { createData, updateData, destroyData, getDataByVar, getTableVars};
+module.exports = { createData, updateData, destroyData, getDataByVar, getTableVars, database, };
