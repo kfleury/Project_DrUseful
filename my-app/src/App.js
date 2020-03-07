@@ -1,24 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import Drugs from './Drugs';
+import './page-header.css';
 
 function App() {
   return (
+    <div>
+      <Router>
+        <Route exact path="/" component={Home} />
+        <Route path="/login" component={Drugs} />
+      </Router>
+    </div>
+  )
+}
+
+function Home() {
+  return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          COUCOU
+      <header className="page-header">
+        <img src="/docteur.png" width= '50px' alt= "docteur"/>
+        <h2>oui</h2>
+        <h3>oui</h3>
+        <Link to="/login">
+        <button className="Button">
+        <p className="Button_police">
+          connexion
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        </button>
+        </Link>
       </header>
+      <body className="App-header">
+        <img src="/pillule.png" wifth= '400px' className="App-logo" alt="logo" />
+        <p>
+          Dr Useful Guaranted Security
+        </p>
+      </body>
     </div>
   );
 }
