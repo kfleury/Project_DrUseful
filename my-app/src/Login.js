@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 
 async function requestToken(login, password) {
   const response = await axios.post(
@@ -29,6 +29,11 @@ function Login() {
       <Link to="/">
         <button className= "ButtonMenu">Menu</button>
       </Link>
+      <header className= "Title">
+        <p>
+          CONNEXION
+        </p>
+      </header>
       <form>
         <label for="choose" className="text">Login</label>
         <input value={login} onChange={e => setLogin(e.target.value)} required></input>
@@ -38,7 +43,7 @@ function Login() {
         <input value={password} onChange={e => setPassword(e.target.value)} required></input>
       </form>
       <button className = "ButtonEnter" onClick={sendInfo}>Envoyer</button>
-      <text>{token === "" ? <text>Error </text> : <div></div>}</text>
+      <text>{token === undefined ? <text>Error </text> : <div><Redirect to="/home"/></div>}</text>
     </div>
   );
 }

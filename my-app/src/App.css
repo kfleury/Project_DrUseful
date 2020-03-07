@@ -104,3 +104,10 @@
   margin-top: 2%;
   margin-left: 5%;
 }
+
+.Title {
+  color: #FFFFFF;
+  font-style: initial;
+  background: #333333;
+  font-size: calc(20px + 3vmin);
+}
