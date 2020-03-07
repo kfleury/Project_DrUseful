@@ -22,7 +22,7 @@ const cookieParser = require('cookie-parser');
 
 // use and env
 app.use(bodyParser.json());
-app.use(session({secret: "Shh, its a secret!"}));
+app.use(session({secret: "Your secret key", resave: true, saveUninitialized: false}));
 
 // Joi schema and function
 const newUserSchema = Joi.object().keys({
@@ -31,14 +31,11 @@ const newUserSchema = Joi.object().keys({
 });
 
 const newIdSchema = Joi.object().keys({
-    id: Joi.string().uuid().required(),
+    userId: Joi.string().required(),
+    cookie: Joi.object().required(),
 });
 
-const newSessionSchema = Joi.object().keys({
-    perm: Joi.string().string().required(),
-});
-
-const newBodySchema = Joi.object().keys( {
+const newBodySchema = Joi.object().keys({
     drogueID: Joi.string().required(),
 });
 
@@ -48,13 +45,13 @@ const isValid = (schema, location = 'body') => async (req, res, next) => {
     if (error) {
         console.error(error);
         res.status(400);
-        return res.send("Wrong Id").end();
+        return res.send("Cannot logged you in").end();
     }
     next();
 };
 
 const isLogin = (schema, location = 'session') => async (req, res, next) => {
-    const {error, value} = Joi.validate(req[location].id, schema);
+    const {error, value} = Joi.validate(req[location], schema);
 
     if (error) {
         console.error(error);
@@ -68,7 +65,7 @@ async function rootBase() {
     try {
         app.get('/DrUseful', async (req, res) => {
             // on the main page
-            res.send("home page");
+            res.send("home page ");
         });
         app.post('/DrUseful/login', isValid(newUserSchema), async (req, res) => {
             // body login and password (hash) return the user
@@ -76,9 +73,18 @@ async function rootBase() {
         });
         app.post('/DrUseful/register', isValid(newUserSchema), async (req, res) => {
             // body login and username
-            res.send("in register page");
+            let log = req.body.login;
+            let hash;
+            try {
+                hash = await argon2.hash(req.body.password);
+            } catch (err) {
+                console.error("The hash failed");
+            }
+            //await createData('user', {username: log, password: hash, perm: 'user'});
+            req.session.userId = "azertyuiop";
+            res.send("Your account has created\nWelcome " + log + " !");
         });
-        app.get('/DrUseful/me', async (req, res) => {
+        app.get('/DrUseful/me', isLogin(newIdSchema), async (req, res) => {
             // return the user logged in
             res.send("in me page");
         });
@@ -99,19 +105,19 @@ async function rootBase() {
             res.send("in a specific effects page");
         });
         // the user must be logged in
-        app.get('/DrUseful/me/favorite', isLogin(newSessionSchema), async (req, res) => {
+        app.get('/DrUseful/me/favorite', isLogin(newIdSchema), async (req, res) => {
             // return the user.favorite
             res.send("in the favorite page");
         });
-        app.post('/DrUseful/me/favorite/add', isLogin(newSessionSchema), isValid(newBodySchema), async (req, res) => {
+        app.post('/DrUseful/me/favorite/add', isLogin(newIdSchema), isValid(newBodySchema), async (req, res) => {
             // body drugID
             res.send("in the add favorite page of the user");
         });
-        app.delete('/DrUseful/me/favorite/delete', isLogin(newSessionSchema), isValid(newBodySchema), async (req, res) => {
+        app.delete('/DrUseful/me/favorite/delete', isLogin(newIdSchema), isValid(newBodySchema), async (req, res) => {
             // body drugID
             res.send("in the delete favorite page of the user");
         });
-        app.post('/DrUseful/me/bio', isLogin(newSessionSchema), async (req, res) => {
+        app.post('/DrUseful/me/bio', isLogin(newIdSchema), async (req, res) => {
             // body bio, modify the biography of the user
             res.send("in bio page of the logged in user")
         });

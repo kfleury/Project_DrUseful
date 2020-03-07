@@ -23,6 +23,7 @@
   "homepage": "https://github.com/kfleury/Project_DrUseful#readme",
   "dependencies": {
     "@types/express": "^4.17.3",
+    "@types/express-session": "^1.17.0",
     "@types/joi": "^14.3.4",
     "@types/sequelize": "^4.28.8",
     "argon2": "^0.26.1",
