@@ -83,3 +83,5 @@ async function testmyDb() {
 }
 
 testmyDb();
+
+module.exports = { createData, updateData, destroyData, getData_ID, getData_Name, getTableVars};
