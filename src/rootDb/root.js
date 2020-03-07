@@ -86,7 +86,19 @@ async function rootBase() {
     try {
         app.get('/DrUseful', async (req, res) => {
             // on the main page
-            res.send("home page ");
+            res.send("home page");
+        });
+        app.get('/DrUseful/logout', function(req, res, next) {
+            if (req.session) {
+                req.session.destroy(function(err) {
+                    if(err) {
+                        return next(err);
+                    } else {
+                        console.log("You are now logged out");
+                        return res.redirect('/DrUseful');
+                    }
+                });
+            }
         });
         app.post('/DrUseful/login', isValid(newUser1Schema), async (req, res) => {
             // body login and password (hash) return the user
@@ -171,8 +183,7 @@ async function rootBase() {
         });
         app.post('/DrUseful/me/bio', /*isLogin(newIdSchema), */async (req, res) => {
             // body bio, modify the biography of the user
-            const bio = req.body.description;
-            console.log(bio);
+            const bio = req.body.bio;
             await lib.updateData('user',{id: req.session.userId}, {bio: bio});
             res.send("in bio page of the logged in user")
         });

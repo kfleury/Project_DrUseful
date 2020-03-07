@@ -124,6 +124,11 @@ const userDrugFav = seq.define('userDrugFav', {
 
 });
 
+// {
+//     "login": "LeNouveau",
+//     "password": "mlkjhgfdsq"
+// }
+
 async function initDatabase() {
     await seq.sync();
     console.log('Server Load');
