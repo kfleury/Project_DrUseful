@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios';
-import App from './App';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 async function requestToken(login, password) {
@@ -14,7 +13,7 @@ async function requestToken(login, password) {
   return response
 }
 
-function Drugs() {
+function Login() {
   const [login, setLogin] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [token, setToken] = React.useState(undefined)
@@ -44,4 +43,4 @@ function Drugs() {
   );
 }
 
-export default Drugs;
+export default Login;

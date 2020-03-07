@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import Drugs from './Drugs';
+import Login from './Login';
+import Register from './Register';
 import './page-header.css';
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <div>
       <Router>
         <Route exact path="/" component={Home} />
-        <Route path="/login" component={Drugs} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
       </Router>
     </div>
   )
@@ -22,6 +24,13 @@ function Home() {
         <img src="/docteur.png" width= '50px' alt= "docteur"/>
         <h2>oui</h2>
         <h3>oui</h3>
+        <Link to="/register">
+        <button className="Button">
+        <p className="Button_police">
+          Inscription
+        </p>
+        </button>
+        </Link>
         <Link to="/login">
         <button className="Button">
         <p className="Button_police">
