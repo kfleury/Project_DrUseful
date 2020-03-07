@@ -8,41 +8,29 @@ async function createData(table, data){
     }
 }
 
-async function updateData(table, name, modifs){
+async function updateData(table, varCheck, valCheck, modifs){
     try {
         await database[table].update(modifs, {
-            where: {name},
+            where: {[varCheck]: valCheck},
         });
     } catch (e) {
         throw e;
     }
 }
-async function destroyData(table, name){
+async function destroyData(table, varCheck, valCheck){
     try {
         await database[table].destroy({
             where:
-                {name}
+                {[varCheck]: valCheck}
         });
     } catch (e){
         throw (e);
     }
 }
 
-async function getData_ID(table, id){
+async function getDataByVar(table, variableName, value){
     try {
-        let data = await database[table].findAll({where : {id}});
-        if (data.length === 0)
-            throw ('Wrong ID');
-        console.log(data[0].dataValues);
-        return data[0].dataValues;
-    } catch (e){
-        throw e;
-    }
-}
-
-async function getData_Name(table, name){
-    try {
-        let data = await database[table].findAll({where : {name}});
+        let data = await database[table].findAll({where : {[variableName]: value}});
         if (data.length === 0)
             throw ('Wrong name');
         return data[0].dataValues;
@@ -75,8 +63,8 @@ async function testmyDb() {
     await database.initDatabase();
 
     // ** Show database
-    console.log(await getTableVars('drug', 'name', 'type', 'soft'));
-    await getData_ID('drug', '9f3d0522-f514-4e3a-8fc2-2f343ed746e6');
+    console.log(await getTableVars('drug', 'id', 'type', 'soft'));
+    console.log(await getDataByVar('drug','id', '9f3d0522-f514-4e3a-8fc2-2f343ed746e6'));
     await database.drug.findAll()
         .then(data => console.log(JSON.stringify(data, null, 4)))
         .catch(e => console.log(e));
@@ -84,4 +72,4 @@ async function testmyDb() {
 
 testmyDb();
 
-module.exports = { createData, updateData, destroyData, getData_ID, getData_Name, getTableVars};
+module.exports = { createData, updateData, destroyData, getDataByVar, getTableVars};
