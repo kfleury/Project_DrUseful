@@ -101,7 +101,7 @@ const drugEffect = seq.define('drugEffect', {
 });
 
 // ! Creation of userDrogueFav associative model in DB
-const userDrogueFav = seq.define('userDrogueFav', {
+const userDrugFav = seq.define('userDrogueFav', {
     drogueId: {
         type: DataTypes.UUIDV4,
         unique: true,
@@ -122,5 +122,5 @@ async function initDatabase() {
 
 // ! Export
 module.exports = {
-    initDatabase, drug, user, effect, userDrogueFav, drugEffect,
+    initDatabase, drug, user, effect, userDrugFav, drugEffect,
 };
