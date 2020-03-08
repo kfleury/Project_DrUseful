@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Login from './Login';
 import Register from './Register';
 import './page-header.css';
+import Drugs from './Drugs';
+import Menu from './Menu';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/drugs" component={Drugs} />
+        <Route path="/menu" component={Menu} />
       </Router>
     </div>
   )
@@ -46,7 +50,7 @@ function Home() {
       <body className="App-header">
         <img src="/pillule.png" wifth= '400px' className="App-logo" alt="logo" />
         <p>
-          Dr Useful Guaranted Security
+          Dr. Useful : Guaranteed Security
         </p>
       </body>
     </div>

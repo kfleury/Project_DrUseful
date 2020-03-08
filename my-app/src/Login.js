@@ -5,22 +5,24 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 
 async function requestToken(login, password) {
   const response = await axios.post(
-    'http://localhost:3000/login',
+    'http://localhost:8080/login',
     { "login": login,
       "password": password,
     },
-  )
-  return response
+  );
+  if (response.data === "You are logged in")
+    return window.location.href = '/Menu'
+  else
+    return alert("T'es qui fils de pute")
 }
 
 function Login() {
   const [login, setLogin] = React.useState("")
   const [password, setPassword] = React.useState("")
-  const [token, setToken] = React.useState(undefined)
 
   const sendInfo = async function () {
     console.log(login, password);
-    const data = requestToken(login, password);
+    const data = await requestToken(login, password);
     return data;
   }
 
@@ -42,8 +44,7 @@ function Login() {
         <label for="choose" className="text">password</label>
         <input value={password} onChange={e => setPassword(e.target.value)} required></input>
       </form>
-      <button className = "ButtonEnter" onClick={sendInfo}>Log in</button>
-      <text>{token === undefined ? <text>Error</text> : <div><Redirect to="/home"/></div>}</text>
+      <button className = "ButtonEnter" onClick={() => sendInfo()}>Log in</button>
     </div>
   );
 }

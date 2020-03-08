@@ -3,25 +3,30 @@ import './App.css';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 
-async function requestToken(login, password) {
+async function requestToken(login, password, confpassword) {
   const response = await axios.post(
-    'http://localhost:3000/register',
+    'http://localhost:8080/register',
     { "login": login, 
-      "paswword": password,
+      "password": password,
+      "confPassword": confpassword,
     },
   )
-  return response
+  console.log(response.data);
+  if (response.data === "Your account has created\nWelcome")
+    return window.location.href = '/login'
+  else
+    return response
 }
 
 function Register() {
   const [login, setLogin] = React.useState("")
   const [password, setPassword] = React.useState("")
-  const [confpassword, setConfpassword] = React.useState("")
+  const [confPassword, setConfpassword] = React.useState("")
   const [token, setToken] = React.useState(undefined)
 
   const sendInfo = async function () {
     console.log(login, password);
-    const data = requestToken(login, password);
+    const data = requestToken(login, password, confPassword);
     return data;
   }
 
@@ -45,10 +50,9 @@ function Register() {
       </form>
       <form>
         <label for="choose" className="text">confirm password</label>
-        <input value={confpassword} onChange={e => setConfpassword(e.target.value)} required></input>
+        <input value={confPassword} onChange={e => setConfpassword(e.target.value)} required></input>
       </form>
-      <button className = "ButtonEnter" onClick={sendInfo}>Register</button>
-      <text>{token === undefined ? <text>Error </text> : <div><Redirect to="/home"/></div>}</text>
+      <button className = "ButtonEnter" onClick={() => { sendInfo()}}>Register</button>
     </div>
   );
 }
